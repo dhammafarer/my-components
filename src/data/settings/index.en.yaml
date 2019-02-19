@@ -1,0 +1,22 @@
+title: "Site Title"
+logo: "/assets/uploads/logo.png"
+nav:
+  - to: "/"
+    label: "Home"
+  - to: "/about"
+    label: "About"
+  - to: "/contact"
+    label: "Contact"
+contacts:
+  - name: "Valen Headquarters"
+    email: "example@email.com"
+    phone: "+886-2-333-444"
+    address:
+      street: "No 1, Fake Street"
+      district: "Danshui District"
+      city: "New Taipei"
+      country: "Taiwan"
+
+  - name: "Sales"
+    email: "sales@valen.com.tw"
+    phone: "+886-2-333-444"

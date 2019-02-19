@@ -1,0 +1,1 @@
+export { onCreatePage } from "./onCreatePage";

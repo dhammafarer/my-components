@@ -1,0 +1,157 @@
+backend:
+  name: "bitbucket"
+  branch: "dev"
+  repo: "valen-international/valen"
+
+media_folder: "/static/assets/uploads/"
+public_folder: "/assets/uploads"
+
+collections:
+  ##### start Pages EN #####
+  - name: "pages"
+    label: "Pages EN"
+    editor:
+      preview: false
+    files:
+      - label: "Index Page"
+        name: "about"
+        file: "src/data/content/index.en.yaml"
+        fields:
+          - { label: "Title", name: "title" }
+          - { label: "Subtitle", name: "subtitle" }
+          - { label: "Header Image", name: "image", widget: "image" }
+          - { label: "Content", name: "markdown", widget: "markdown" }
+
+      - label: "About Page"
+        name: "about"
+        file: "src/data/content/about.en.yaml"
+        fields:
+          - { label: "Title", name: "title" }
+          - { label: "Subtitle", name: "subtitle" }
+          - { label: "Header Image", name: "image", widget: "image" }
+          - { label: "Content", name: "markdown", widget: "markdown" }
+
+      - label: "Contact Page"
+        name: "contact"
+        file: "src/data/content/contact.en.yaml"
+        fields:
+          - { label: "Title", name: "title" }
+          - { label: "Subtitle", name: "subtitle" }
+          - { label: "Header Image", name: "image", widget: "image" }
+          - { label: "Content", name: "markdown", widget: "markdown" }
+
+      - label: "Wines Page"
+        name: "contact"
+        file: "src/data/content/wines.en.yaml"
+        fields:
+          - { label: "Title", name: "title" }
+          - { label: "Subtitle", name: "subtitle" }
+          - { label: "Header Image", name: "image", widget: "image" }
+          - { label: "Content", name: "markdown", widget: "markdown" }
+
+      - label: "Wineries Page"
+        name: "contact"
+        file: "src/data/content/wineries.en.yaml"
+        fields:
+          - { label: "Title", name: "title" }
+          - { label: "Subtitle", name: "subtitle" }
+          - { label: "Header Image", name: "image", widget: "image" }
+          - { label: "Content", name: "markdown", widget: "markdown" }
+
+      - label: "Events Page"
+        name: "contact"
+        file: "src/data/content/events.en.yaml"
+        fields:
+          - { label: "Title", name: "title" }
+          - { label: "Subtitle", name: "subtitle" }
+          - { label: "Header Image", name: "image", widget: "image" }
+          - { label: "Content", name: "markdown", widget: "markdown" }
+  ##### end Pages EN #####
+
+  ##### start Awards #####
+  - name: "awards"
+    editor:
+      preview: false
+    label: "Awards"
+    folder: "src/data/awards"
+    create: true
+    extension: "yaml"
+    identifier_field: "id"
+    fields:
+      - { name: "id", label: "Award ID" }
+      - { name: "title", label: "Title" }
+      - { name: "image", label: "Image", widget: "image" }
+  ##### end Awards #####
+
+  ##### start Wineries #####
+  - name: "wineries"
+    editor:
+      preview: false
+    label: "Wineries"
+    folder: "src/data/wineries"
+    create: true
+    extension: "yaml"
+    identifier_field: "id"
+    fields:
+      - { name: "id", label: "Winery ID" }
+      - { name: "name", label: "Name" }
+      - { name: "country", label: "Country" }
+  ##### end Wineries #####
+
+  ##### start Wines #####
+  - name: "wines"
+    identifier_field: "id"
+    editor:
+      preview: false
+    label: "Wines"
+    folder: "src/data/wines"
+    extension: "yaml"
+    create: true
+    fields:
+      - { name: "id", label: "Wine ID" }
+      - { name: "name", label: "Name" }
+      - {
+          name: "winery",
+          label: "Winery ID",
+          widget: "relation",
+          collection: "wineries",
+          searchFields: ["name"],
+          valueField: "id",
+          displayFields: ["name"],
+        }
+      - name: "kind"
+        label: "Kind"
+        widget: "select"
+        options:
+          - { label: "Red", value: "red" }
+          - { label: "White", value: "white" }
+          - { label: "Rose", value: "rose" }
+          - { label: "Sparkling", value: "sparkling" }
+      - { name: "origin", label: "Origin", required: false }
+      - { name: "alcohol", label: "Alcohol Content", required: false }
+      - { name: "bottle", label: "Bottle", default: "0.75", required: false }
+      - { name: "image", label: "Image", widget: "image" }
+      - {
+          name: "datasheet",
+          label: "Datasheet",
+          widget: "file",
+          required: false,
+        }
+      - { name: "variety", label: "Variety", required: false }
+      - { name: "eye", label: "Eye", required: false }
+      - { name: "nose", label: "Nose", required: false }
+      - { name: "mouth", label: "Mouth", required: false }
+      - { name: "pairing", label: "Food Pairing", required: false }
+      - name: "awards"
+        required: false
+        label: "Awards"
+        widget: "list"
+        field:
+          label: "Award"
+          name: "awardId"
+          widget: "relation"
+          collection: "awards"
+          searchFields: ["title"]
+          valueField: "title"
+          displayFields: ["title"]
+  ##### end Wines #####
