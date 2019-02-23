@@ -31,7 +31,14 @@ const PromoSection: React.SFC<Props> = ({ promo: { frontmatter, fields } }) => {
           radius={1}
         >
           <Flex w={[1, 1, 1 / 2]}>
-            <Card b={1} borderColor="grey.200" w={1} p={4} bg="white.light">
+            <Card
+              b={1}
+              borderColor="grey.200"
+              w={1}
+              p={4}
+              bg="white.light"
+              style={{ minHeight: 400 }}
+            >
               <Image
                 fluid={frontmatter.image}
                 style={{ width: "100%", height: "100%" }}

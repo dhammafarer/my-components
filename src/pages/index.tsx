@@ -37,7 +37,11 @@ const IndexPage: React.SFC<Props> = ({ pageContext, intl }) => {
   return (
     <Layout>
       <AngledHeader title={"Event"} subtitle="Special Event" />
-      <PromoSection promo={promo} />
+      {Array(4)
+        .fill("")
+        .map((x, i) => (
+          <PromoSection key={i} promo={promo} />
+        ))}
     </Layout>
   );
 };

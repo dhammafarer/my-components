@@ -6,7 +6,7 @@ import { injectIntl, InjectedIntlProps } from "react-intl";
 
 import { Normalize } from "styled-normalize";
 import { Head } from "./Head";
-import { Header } from "./Header";
+import { Header } from "src/components/Header";
 import { Footer } from "./Footer";
 
 const GlobalStyle = createGlobalStyle`
