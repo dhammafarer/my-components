@@ -5,6 +5,7 @@ import { Button } from "src/components/Button";
 import { Flex, Card, Box, styled } from "primithemes";
 import { Image } from "src/components/Image";
 import { Container } from "src/components/Container";
+import { Link } from "src/components/Link";
 
 interface Props {
   promo: Promotion;
@@ -20,32 +21,33 @@ const Wrapper = styled(Box)`
 
 const PromoSection: React.SFC<Props> = ({ promo: { frontmatter, fields } }) => {
   return (
-    <Wrapper p={4}>
+    <Wrapper py={[0, 4]} px={[0, 3]}>
       <Container>
         <Card
           shadow={1}
           flexDirection="row"
-          flexWrap="wrap"
-          p={4}
+          p={[0, 4]}
           bg="white.light"
           radius={1}
+          flexWrap="wrap"
         >
-          <Flex w={[1, 1, 1 / 2]}>
+          <Flex bg="green" w={[1, 1, 1, 1 / 2]}>
             <Card
-              b={1}
-              borderColor="grey.200"
               w={1}
-              p={4}
+              b={[0, 0, 1, 0, 1]}
+              borderColor={["transparent", "grey.200"]}
+              p={[0, 0, 4, 0, 4]}
               bg="white.light"
-              style={{ minHeight: 400 }}
             >
-              <Image
-                fluid={frontmatter.image}
-                style={{ width: "100%", height: "100%" }}
-              />
+              <Link to={fields.slug}>
+                <Image
+                  fluid={frontmatter.image}
+                  style={{ minHeight: "400px", width: "100%", height: "100%" }}
+                />
+              </Link>
             </Card>
           </Flex>
-          <Flex ml={3} style={{ flexGrow: 1 }}>
+          <Flex pl={3} w={[1, 1, 1, 1 / 2]}>
             <Card p={3} w={1} alignItems="center" justifyContent="center">
               <Text
                 is="h1"
@@ -53,13 +55,21 @@ const PromoSection: React.SFC<Props> = ({ promo: { frontmatter, fields } }) => {
                 fontWeight={6}
                 fontSize={6}
                 textTransform="uppercase"
+                textAlign="center"
+                my={1}
               >
                 {frontmatter.title}
               </Text>
-              <Text is="h5" fontSize={3} color="text.main">
+              <Text
+                my={1}
+                is="h5"
+                fontSize={3}
+                color="text.main"
+                textAlign="center"
+              >
                 {frontmatter.subtitle}
               </Text>
-              <Box>
+              <Box my={2}>
                 <Button to={fields.slug} variant="secondary" contained>
                   {frontmatter.buttonText}
                 </Button>
