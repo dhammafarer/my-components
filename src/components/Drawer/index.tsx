@@ -23,6 +23,7 @@ const DrawerOverlay = styled.div<{ onClick(): void }>`
   z-index: 1400;
   opacity: 0;
   position: fixed;
+  height: 100vh;
   top: 0;
   right: 0;
   left: 0;
