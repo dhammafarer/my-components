@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 
 interface InjectedProps {
   handleClose(): void;
@@ -16,41 +16,39 @@ interface State {
 
 class MakeMenu extends React.Component<MakeMenuProps, {}> {
   state: State = {
-    menu: false
-  }
+    menu: false,
+  };
 
   handleKeyDown = (event: any) => {
     if (event.keyCode === 27) {
       this.handleClose();
     }
-  }
+  };
 
   componentDidUpdate(prevProps: MakeMenuProps, prevState: State) {
     if (!prevState.menu && this.state.menu) {
       document.addEventListener("keydown", this.handleKeyDown);
-      document.body.style.position = "fixed";
+      document.body.style.overflowY = "hidden";
     }
     if (prevState.menu && !this.state.menu) {
       document.removeEventListener("keydown", this.handleKeyDown);
-      document.body.style.position = "static";
+      document.body.style.overflowY = "visible";
     }
   }
 
   handleClose = () => {
-    this.setState({menu: false})
-  }
+    this.setState({ menu: false });
+  };
 
-  toggleMenu = () => this.setState({menu: !this.state.menu})
+  toggleMenu = () => this.setState({ menu: !this.state.menu });
 
   render() {
     return this.props.children({
       open: this.state.menu,
       handleClose: this.handleClose,
-      toggleMenu: this.toggleMenu
+      toggleMenu: this.toggleMenu,
     });
   }
 }
 
-export {
-  MakeMenu,
-};
+export { MakeMenu };
