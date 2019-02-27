@@ -1,24 +1,34 @@
+interface Promotion {
+  fields: {
+    slug: string;
+  };
+  frontmatter: {
+    title: string;
+    buttonText: string;
+  };
+}
+
 export interface Wine {
-  node: {
+  fields: {
+    slug: string;
+  };
+  originalId: string;
+  name: string;
+  kind: string;
+  origin: string;
+  year: string;
+  eye: string;
+  mouth: string;
+  nose: string;
+  pairing: string;
+  wineId: string;
+  promotions: Promotion[];
+  winery: {
+    originalId: string;
+    name: string;
     fields: {
       slug: string;
     };
-    originalId: string;
-    name: string;
-    kind: string;
-    year: string;
-    origin: string;
-    eye: string;
-    nose: string;
-    mouth: string;
-    wineId: string;
-    winery: {
-      name: string;
-      originalId: string;
-      fields: {
-        slug: string;
-      };
-    };
-    image: any;
   };
+  image: any;
 }

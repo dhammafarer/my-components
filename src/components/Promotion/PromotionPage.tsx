@@ -3,19 +3,17 @@ import { PageHeader, SectionHeader } from "src/components/Page";
 import { Image } from "src/components/Image";
 import { Box } from "primithemes";
 import { Content } from "src/components/Content";
-import { WineNode, WinesList } from "src/components/Wine";
+import { Wine, WinesList } from "src/components/Wine";
 import { Promotion } from "src/components/Promotion";
 
 interface Props {
   promo: Promotion;
-  wines: {
-    edges: WineNode[];
-  };
+  wines: { node: Wine }[];
 }
 
 const PromotionPage: React.SFC<Props> = ({ promo, wines }) => {
   const { kinds, wines: ws, wineries } = promo.frontmatter;
-  const promoWines = wines.edges.filter(
+  const promoWines = wines.filter(
     ({ node }) =>
       (kinds && kinds.includes(node.kind)) ||
       (ws && ws.includes(node.originalId)) ||

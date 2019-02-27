@@ -1,15 +1,16 @@
 import * as React from "react";
 import { Flex } from "primithemes";
-import { WineNode } from "./WineNode.d";
+import { Wine } from "./Wine.d";
 import { WineCard } from "./WineCard";
 import { Text } from "../Typography";
 
 interface Props {
-  wines: WineNode[];
+  wines: { node: Wine }[];
   hidePromo?: boolean;
 }
 
 const WinesList: React.SFC<Props> = ({ wines, hidePromo }) => {
+  console.log(wines);
   return (
     <Flex w={1} flexWrap="wrap" style={{ height: "100%" }}>
       {wines.length > 0 ? (

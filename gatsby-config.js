@@ -3,6 +3,10 @@ const siteMetadata = require("./src/data/siteMetadata");
 
 module.exports = {
   siteMetadata,
+  mapping: {
+    "Wines.winery": "Wineries.id",
+    "Wines.awards": "Awards",
+  },
   plugins: [
     {
       resolve: "gatsby-plugin-google-analytics",
