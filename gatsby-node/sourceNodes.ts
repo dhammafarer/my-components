@@ -45,12 +45,14 @@ export const sourceNodes: GatsbySourceNodes = ({
   };
 
   const createAward = () => {
+    const id = createNodeId(faker.random.uuid());
     const content = {
-      name: faker.company.companyName(),
+      title: faker.company.companyName(),
+      originalId: id,
     };
 
     const nodeMeta = {
-      id: createNodeId(faker.random.uuid()),
+      id,
       parent: null,
       children: [],
       internal: {
