@@ -8,7 +8,12 @@ require("ts-node").register({
   },
 });
 
-const { onCreatePage, sourceNodes } = require("./gatsby-node/index.ts");
+const {
+  onCreatePage,
+  onCreateNode,
+  sourceNodes,
+} = require("./gatsby-node/index.ts");
 
 exports.onCreatePage = onCreatePage;
 exports.sourceNodes = sourceNodes;
+exports.onCreateNode = onCreateNode;
