@@ -19,21 +19,19 @@ export const onCreateNode: GatsbyOnCreateNode = ({
   const { createNodeField, createNode, createParentChildLink } = actions;
 
   // Create Content nodes
-  if (node.internal.owner === "gatsby-transformer-yaml") {
+  if (node.internal.type.match(/Yaml$/)) {
     const { id, parent, children, internal, ...nodeContent } = Object.assign(
       {},
       node
     );
 
-    const { absolutePath } = getNode(parent);
-
-    const content = Object.assign(
-      { originalId: node.id },
-      processStringProperties(
-        [renderMarkdown, replaceAssetPath(absolutePath)],
-        nodeContent
-      )
-    );
+    const processedContent = parent
+      ? processStringProperties(
+          [renderMarkdown, replaceAssetPath(getNode(parent).absolutePath)],
+          nodeContent
+        )
+      : nodeContent;
+    const content = Object.assign({ originalId: node.id }, processedContent);
 
     const nodeMeta = {
       id: createNodeId(`${node.id}`),
@@ -73,10 +71,12 @@ export const onCreateNode: GatsbyOnCreateNode = ({
 
   if (node.internal.type === "MarkdownRemark") {
     const parent = getNode(node.parent);
-    node.frontmatter = processStringProperties(
-      [replaceAssetPath(parent.absolutePath)],
-      node.frontmatter
-    );
+    if (parent) {
+      node.frontmatter = processStringProperties(
+        [replaceAssetPath(parent.absolutePath)],
+        node.frontmatter
+      );
+    }
     const type = parent.sourceInstanceName;
     const slug = "/" + [type, parent.name].join("/");
     const lang = node.frontmatter.lang;

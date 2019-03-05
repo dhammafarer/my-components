@@ -40,7 +40,7 @@ export type GatsbyOnCreateNode = (params: {
   createContentDigest: any;
 }) => void;
 
-export type GatsbySourceNodes = (params: {
+export interface GatsbySourceNodesProps {
   store: any;
   cache: any;
   createNodeId: any;
@@ -48,4 +48,6 @@ export type GatsbySourceNodes = (params: {
   getNodes(): Node[];
   getNode: any;
   actions: Actions;
-}) => void;
+}
+
+export type GatsbySourceNodes = (params: GatsbySourceNodesProps) => void;
