@@ -10,7 +10,6 @@ interface Props {
 }
 
 const WinesList: React.SFC<Props> = ({ wines, hidePromo }) => {
-  console.log(wines);
   return (
     <Flex w={1} flexWrap="wrap" style={{ height: "100%" }}>
       {wines.length > 0 ? (

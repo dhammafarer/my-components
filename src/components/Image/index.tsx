@@ -1,7 +1,7 @@
 import * as React from "react";
 import GatsbyImage from "gatsby-image";
 
-interface ImgProps {
+interface ImageProps {
   fixed?: any;
   fluid?: any;
   className?: string;
@@ -9,17 +9,18 @@ interface ImgProps {
   critical?: boolean;
   fadeIn?: boolean;
   imgStyle?: any;
+  placeholder?: any;
 }
 
-const Image: React.SFC<ImgProps> = (
-  { fixed, fluid, className, critical, imgStyle, fadeIn, style },
+const Image: React.SFC<ImageProps> = (
+  { fixed, fluid, className, critical, imgStyle, fadeIn, style, placeholder },
   ...props
 ) => {
   if (!(fluid || fixed))
     return (
       <div
         style={{
-          background: `url(${require("./default.jpg")})`,
+          background: `url(${placeholder || require("./default.jpg")})`,
           backgroundSize: "cover",
           backgroundPosition: "50% 50%",
           ...style,
@@ -41,4 +42,4 @@ const Image: React.SFC<ImgProps> = (
   );
 };
 
-export { Image };
+export { Image, ImageProps };

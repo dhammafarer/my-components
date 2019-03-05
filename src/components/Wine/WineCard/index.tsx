@@ -1,15 +1,14 @@
 import * as React from "react";
 import { styled, Card, Text, Box, Flex } from "primithemes";
 import { Button } from "src/components/Button";
-import { Image } from "src/components/Image";
+import { WineImage } from "../WineImage";
 import { Link } from "src/components/Link";
 import { PromoButton } from "./PromoButton";
 import { PromoMarker } from "./PromoMarker";
 
-const Img = styled(Image)``;
-
 const ImageWrapper = styled(Box)`
   position: relative;
+  z-index: 0;
   background: ${props => props.theme.colors.grey[200]};
   &:hover {
     background: ${props => props.theme.colors.grey[300]};
@@ -24,7 +23,8 @@ const ImageWrapper = styled(Box)`
     left: 0;
     background-image: url(${require("./cairo-pentagon-32.png")});
     background-repeat: repeat;
-    opacity: 0.6;
+    opacity: 1;
+    z-index: -1;
   }
   &:hover::before {
     opacity: 0.5;
@@ -64,7 +64,7 @@ const WineCard: React.SFC<Props> = ({
     <Link to={slug}>
       <ImageWrapper p={3} style={{ height: 300 }}>
         {promotions.length > 0 && <PromoMarker />}
-        <Img
+        <WineImage
           imgStyle={{ objectFit: "contain" }}
           style={{ height: "100%" }}
           fluid={image}
