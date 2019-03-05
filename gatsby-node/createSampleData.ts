@@ -2,6 +2,8 @@ import { GatsbySourceNodesProps } from "./types";
 import { createRemoteFileNode } from "gatsby-source-filesystem";
 import faker from "faker";
 
+const dev = process.env.NODE_ENV === "development";
+
 const replicate = (fn, n) =>
   Array(n)
     .fill(fn)
@@ -18,10 +20,10 @@ export const createSampleData = ({
 }: GatsbySourceNodesProps) => {
   const { createNode } = actions;
 
-  const createSettings = () => {
+  const createSettings = lang => {
     const content = {
       title: faker.company.companyName(),
-      lang: "en",
+      lang,
       pageName: "index",
       nav: [{ to: "/", label: "Home" }],
       contacts: [
@@ -62,10 +64,47 @@ export const createSampleData = ({
       return node;
     });
   };
+  const createContent = (pageName, lang) => {
+    const content = {
+      title: faker.lorem.words(),
+      subtitle: faker.lorem.words(),
+      markdown: [
+        `<h1>${faker.lorem.sentence()}</h1>`,
+        `<p>${faker.lorem.paragraph()}</p>`,
+        `<p>${faker.lorem.paragraph()}</p>`,
+      ].join(""),
+      lang,
+      pageName,
+    };
+
+    const nodeMeta = {
+      id: createNodeId(faker.random.uuid()),
+      parent: null,
+      children: [],
+      internal: {
+        type: `ContentYaml`,
+        content: JSON.stringify(content),
+        contentDigest: createContentDigest(content),
+      },
+    };
+    return createRemoteFileNode({
+      url: faker.image.abstract(),
+      parentNodeId: nodeMeta.id,
+      store,
+      cache,
+      createNode,
+      createNodeId,
+    }).then((x: any) => {
+      const node = Object.assign({}, content, nodeMeta, { image___NODE: x.id });
+      createNode(node);
+      return node;
+    });
+  };
 
   const createWinery = () => {
     const content = {
       name: faker.company.companyName(),
+      country: faker.address.country(),
     };
 
     const nodeMeta = {
@@ -91,7 +130,6 @@ export const createSampleData = ({
       return node;
     });
   };
-
   const createAward = () => {
     const id = createNodeId(faker.random.uuid());
     const content = {
@@ -129,6 +167,9 @@ export const createSampleData = ({
       awards: [faker.random.arrayElement(awards).id],
       name: faker.commerce.productName(),
       kind: faker.random.arrayElement(["white", "red", "sparkling"]),
+      aging: faker.lorem.paragraph(),
+      variety: faker.lorem.words(),
+      datasheet: null,
       year: faker.date
         .past(30)
         .getFullYear()
@@ -166,11 +207,15 @@ export const createSampleData = ({
     });
   };
 
-  return Promise.all(replicate(createWinery, 3))
-    .then(wineries =>
-      Promise.all(replicate(createAward, 5)).then(awards => {
-        return Promise.all(replicate(createWine(wineries, awards), 3));
-      })
-    )
-    .then(() => createSettings());
+  return !dev
+    ? Promise.resolve()
+    : Promise.all(replicate(createWinery, 3))
+        .then(wineries =>
+          Promise.all(replicate(createAward, 5)).then(awards => {
+            return Promise.all(replicate(createWine(wineries, awards), 3));
+          })
+        )
+        .then(() => createSettings("en"))
+        .then(() => createContent("index", "en"))
+        .then(() => createContent("index", "zh"));
 };

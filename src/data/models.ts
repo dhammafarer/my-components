@@ -25,7 +25,10 @@ export const promo = (): Promotion => {
       lang: "en",
     },
     htmlAst: null,
-    html: `"<p>${faker.lorem.paragraph()}</p>",`,
+    html: [
+      `<p>${faker.lorem.paragraphs()}</p>`,
+      `<p>${faker.lorem.paragraphs()}</p>`,
+    ].join(""),
   };
 };
 
