@@ -48,15 +48,15 @@ export const onCreateNode: GatsbyOnCreateNode = ({
     createParentChildLink({ parent: node, child: newNode });
   }
 
-  if (node.internal.type === "ContentYamlX") {
-    const [pageName, lang] = getNode(node.parent).name.split(".");
-    createNodeField({ node, name: "lang", value: lang });
-    createNodeField({ node, name: "pageName", value: pageName });
-  }
-
-  if (node.internal.type === "SettingsYamlX") {
-    const [, lang] = getNode(node.parent).name.split(".");
-    createNodeField({ node, name: "lang", value: lang });
+  if (["ContentYamlX", "SettingsYamlX"].indexOf(node.internal.type) > -1) {
+    if (process.env.NODE_ENV === "development") {
+      createNodeField({ node, name: "lang", value: node.lang });
+      createNodeField({ node, name: "pageName", value: node.pageName });
+    } else {
+      const [pageName, lang] = getNode(node.parent).name.split(".");
+      createNodeField({ node, name: "lang", value: lang });
+      createNodeField({ node, name: "pageName", value: pageName });
+    }
   }
 
   if (node.internal.type === "Wines") {

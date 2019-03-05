@@ -18,6 +18,51 @@ export const createSampleData = ({
 }: GatsbySourceNodesProps) => {
   const { createNode } = actions;
 
+  const createSettings = () => {
+    const content = {
+      title: faker.company.companyName(),
+      lang: "en",
+      pageName: "index",
+      nav: [{ to: "/", label: "Home" }],
+      contacts: [
+        {
+          name: faker.company.bsNoun(),
+          email: faker.internet.email(),
+          phone: faker.phone.phoneNumber(),
+          address: {
+            street: faker.address.streetName(),
+            district: faker.address.county(),
+            city: faker.address.city(),
+            country: faker.address.country(),
+          },
+        },
+      ],
+    };
+
+    const nodeMeta = {
+      id: createNodeId(faker.random.uuid()),
+      parent: null,
+      children: [],
+      internal: {
+        type: `SettingsYaml`,
+        content: JSON.stringify(content),
+        contentDigest: createContentDigest(content),
+      },
+    };
+    return createRemoteFileNode({
+      url: faker.image.image(),
+      parentNodeId: nodeMeta.id,
+      store,
+      cache,
+      createNode,
+      createNodeId,
+    }).then((x: any) => {
+      const node = Object.assign({}, content, nodeMeta, { logo___NODE: x.id });
+      createNode(node);
+      return node;
+    });
+  };
+
   const createWinery = () => {
     const content = {
       name: faker.company.companyName(),
@@ -121,9 +166,11 @@ export const createSampleData = ({
     });
   };
 
-  return Promise.all(replicate(createWinery, 3)).then(wineries =>
-    Promise.all(replicate(createAward, 5)).then(awards => {
-      return Promise.all(replicate(createWine(wineries, awards), 3));
-    })
-  );
+  return Promise.all(replicate(createWinery, 3))
+    .then(wineries =>
+      Promise.all(replicate(createAward, 5)).then(awards => {
+        return Promise.all(replicate(createWine(wineries, awards), 3));
+      })
+    )
+    .then(() => createSettings());
 };

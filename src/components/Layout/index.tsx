@@ -3,6 +3,7 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { Flex, Box, styled } from "primithemes";
 import { theme } from "../../theme";
 import { injectIntl, InjectedIntlProps } from "react-intl";
+import { graphql, StaticQuery } from "gatsby";
 
 import { Normalize } from "styled-normalize";
 import { Head } from "./Head";
@@ -43,36 +44,93 @@ const Main = styled(Box)`
   flex-grow: 1;
 `;
 
-const title = "Site Title";
-const contact = {
-  phone: "+886-2847-2340",
-  email: "example@email.com",
-};
-const nav = [{ to: "/", label: "Home" }];
+interface Contact {
+  phone: string;
+  email: string;
+}
+
+interface SettingsNode {
+  node: {
+    title: string;
+    logo: any;
+    nav: { to: string; label: string }[];
+    contacts: Contact[];
+    fields: {
+      lang: string;
+    };
+  };
+}
+
+interface Data {
+  settings: {
+    edges: SettingsNode[];
+  };
+}
 
 export const BaseLayout: React.SFC<InjectedIntlProps> = ({
   children,
   intl,
-}) => {
-  return (
-    <ThemeProvider theme={theme}>
-      <Root>
-        <Normalize />
-        <GlobalStyle />
-        <Head title={title} />
-        <Content bg="background.main">
-          <Header title={title} navItems={nav} logo={null} />
-          <Main>{children}</Main>
-          <Footer
-            logo={null}
-            title={title}
-            email={contact.email}
-            phone={contact.phone}
-          />
-        </Content>
-      </Root>
-    </ThemeProvider>
-  );
-};
+}) => (
+  <StaticQuery
+    query={graphql`
+      query Layout2Query {
+        settings: allSettingsYamlX {
+          edges {
+            node {
+              title
+              logo {
+                childImageSharp {
+                  fixed(height: 100, quality: 100) {
+                    ...GatsbyImageSharpFixed
+                  }
+                }
+              }
+              nav {
+                label
+                to
+              }
+              contacts {
+                phone
+                email
+              }
+              fields {
+                lang
+              }
+            }
+          }
+        }
+      }
+    `}
+    render={(data: Data) => {
+      const settings =
+        data.settings.edges.find(
+          ({ node }) => node.fields.lang === intl.locale
+        ) || data.settings.edges[0];
+      return (
+        <ThemeProvider theme={theme}>
+          <Root>
+            <Normalize />
+            <GlobalStyle />
+            <Head title={settings.node.title} />
+            <Content bg="background.main">
+              <Header
+                title={settings.node.title}
+                navItems={settings.node.nav}
+                logo={settings.node.logo}
+              />
+              <Main>{children}</Main>
+              <Footer
+                logo={settings.node.logo}
+                email={settings.node.contacts[0].email}
+                phone={settings.node.contacts[0].phone}
+                title={settings.node.title}
+              />
+            </Content>
+          </Root>
+        </ThemeProvider>
+      );
+    }}
+  />
+);
 
 export const Layout = injectIntl(BaseLayout);

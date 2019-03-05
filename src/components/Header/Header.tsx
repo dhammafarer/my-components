@@ -29,12 +29,11 @@ export const Brand = styled(Flex)`
   cursor: pointer;
 `;
 
-export const LogoWrapper = styled(Flex)`
-  width: ${props => props.theme.dimensions[2]};
-`;
+export const LogoWrapper = styled(Flex)``;
 
 export const LogoImg = styled.img`
-  width: 100%;
+  width: auto;
+  height: ${props => props.theme.dimensions[1]};
 `;
 
 export const BrandName = styled(Text)``;
@@ -46,7 +45,7 @@ interface HeaderProps {
 }
 
 export const Header: React.SFC<HeaderProps> = ({ logo, title, navItems }) => (
-  <Headroom>
+  <Headroom style={{ height: "auto" }}>
     <Wrapper bg="white.light" p={3} shadow={1}>
       <Container>
         <Flex
