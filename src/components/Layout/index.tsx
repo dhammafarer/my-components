@@ -114,6 +114,7 @@ export const BaseLayout: React.SFC<InjectedIntlProps> = ({
             <Head title={settings.node.title} />
             <Content bg="background.main">
               <Header
+                topbar
                 title={settings.node.title}
                 navItems={settings.node.nav}
                 logo={null}
