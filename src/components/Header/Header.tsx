@@ -44,6 +44,7 @@ interface HeaderProps {
   title: React.ReactNode;
   navItems: { to: string; label: string }[];
   topbar?: boolean;
+  phone?: string;
 }
 
 const topbarHeight = 30;
@@ -53,9 +54,10 @@ export const Header: React.SFC<HeaderProps> = ({
   title,
   navItems,
   topbar,
+  phone,
 }) => (
   <Box>
-    {topbar && <TopBar height={topbarHeight} />}
+    {topbar && <TopBar phone={phone} height={topbarHeight} />}
     <Headroom pinStart={topbar ? topbarHeight : 0} style={{ height: "auto" }}>
       <Wrapper bg="white.light" p={3} shadow={1}>
         <Container>

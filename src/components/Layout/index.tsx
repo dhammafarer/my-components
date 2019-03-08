@@ -118,6 +118,7 @@ export const BaseLayout: React.SFC<InjectedIntlProps> = ({
                 title={settings.node.title}
                 navItems={settings.node.nav}
                 logo={null}
+                phone={settings.node.contacts[0].phone}
               />
               <Main>{children}</Main>
               <Footer
