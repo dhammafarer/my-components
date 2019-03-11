@@ -1,23 +1,44 @@
 import * as React from "react";
-import { MakeMenu } from "../utils/MakeMenu";
-import { Drawer } from "../Drawer";
 import { MenuButton } from "./MenuButton";
 import { CloseButton } from "./CloseButton";
 import { styled, Flex } from "primithemes";
-import { Button } from "../Button";
-import { Image } from "../Image";
-import { Link } from "../../i18n";
-import { Text } from "src/components/Typography";
-import { Logo } from "src/components/Logo";
+import { useTransition, animated } from "react-spring";
 
-const LogoImg = styled(Image)`
-  margin: 0 auto;
+const DrawerWrapper = styled.div`
+  z-index: 1400;
+  display: block;
 `;
 
-const DrawerContent = styled(Flex)`
+const Dmenu = styled(animated.div)`
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+`;
+
+const DrawerOverlay = styled(animated.div)`
+  z-index: 0;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+`;
+
+const DrawerContent = styled.div`
+  z-index: 1400;
+  height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+`;
+
+const DrawerContentWrapper = styled(Flex)`
   height: 100vh;
   position: relative;
   overflow-y: auto;
+  width: 300px;
 `;
 
 interface DrawerMenuProps {
@@ -27,53 +48,47 @@ interface DrawerMenuProps {
 }
 
 const DrawerMenu: React.SFC<DrawerMenuProps> = ({ logo, title, navItems }) => {
-  return (
-    <MakeMenu>
-      {injected => (
-        <>
-          <MenuButton onClick={injected.toggleMenu} />
+  const [show, set] = React.useState(false);
+  const transitions = useTransition(show, null, {
+    from: { transform: "translate3d(300px,0,0)", opacity: 0 },
+    enter: { transform: "translate3d(0,0,0)", opacity: 1 },
+    leave: { transform: "translate3d(300px,0,0)", opacity: 0 },
+  });
 
-          <Drawer
-            open={injected.open}
-            anchor={"right"}
-            handleClose={injected.handleClose}
-            toggleMenu={injected.toggleMenu}
-            width={300}
-          >
-            <DrawerContent flexDirection="column" bg="background.light" p={3}>
-              <Flex justifyContent="flex-end">
-                <CloseButton onClick={injected.handleClose} />
-              </Flex>
-              <Flex justifyContent="center" w={1}>
-                <Link to="/">
-                  {logo ? (
-                    <LogoImg critical fixed={logo} />
-                  ) : (
-                    <Logo variant="dark" width={100} />
-                  )}
-                </Link>
-              </Flex>
-              {title && (
-                <Flex justifyContent="center" my={3} w={1}>
-                  <Text is="h3" fontSize={3} textAlign="center">
-                    {title}
-                  </Text>
-                </Flex>
-              )}
-              <Flex justifyContent="center" flexDirection="column" p={1}>
-                {navItems.map(x => (
-                  <Flex key={x.to} p={1}>
-                    <Button onClick={injected.handleClose} w={1} to={x.to}>
-                      {x.label}
-                    </Button>
-                  </Flex>
-                ))}
-              </Flex>
-            </DrawerContent>
-          </Drawer>
-        </>
+  const open = () => {
+    document.body.style.overflowY = "hidden";
+    set(true);
+  };
+  const close = () => {
+    document.body.style.overflowY = "scroll";
+    set(false);
+  };
+  return (
+    <DrawerWrapper>
+      <MenuButton onClick={open} />
+      {transitions.map(
+        ({ item, key, props }) =>
+          item && (
+            <div key={key}>
+              <DrawerOverlay
+                style={{ opacity: props.opacity }}
+                onClick={close}
+              />
+              <Dmenu style={{ transform: props.transform }}>
+                <DrawerContent>
+                  <DrawerContentWrapper
+                    flexDirection="column"
+                    bg="background.light"
+                    p={3}
+                  >
+                    <CloseButton onClick={close} />
+                  </DrawerContentWrapper>
+                </DrawerContent>
+              </Dmenu>
+            </div>
+          )
       )}
-    </MakeMenu>
+    </DrawerWrapper>
   );
 };
 

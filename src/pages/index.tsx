@@ -25,6 +25,11 @@ export interface IndexPageProps {
 
 type Props = IndexPageProps & InjectedIntlProps;
 
+const TestItem: React.SFC<{}> = () => {
+  const [amount] = React.useState(0);
+  return <div>{amount}</div>;
+};
+
 const IndexPage: React.SFC<Props> = ({ pageContext, intl, data }) => {
   return (
     <Layout>
@@ -44,6 +49,7 @@ const IndexPage: React.SFC<Props> = ({ pageContext, intl, data }) => {
             <Content
               dangerouslySetInnerHTML={{ __html: data.content.markdown }}
             />
+            <TestItem />
           </Box>
         </Flex>
       </Container>
