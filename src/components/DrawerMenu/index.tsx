@@ -47,12 +47,33 @@ interface DrawerMenuProps {
   navItems: { to: string; label: string }[];
 }
 
-const DrawerMenu: React.SFC<DrawerMenuProps> = ({ logo, title, navItems }) => {
+const useShowMenu = () => {
   const [show, set] = React.useState(false);
+  const open = () => {
+    set(true);
+  };
+
+  const close = () => {
+    set(false);
+  };
+
+  return { show, open, close };
+};
+
+const useDisableBodyScroll = (show: boolean) => {
+  React.useEffect(() => {
+    document.body.style.overflowY = show ? "hidden" : "scroll";
+  }, [show]);
+};
+
+const useDrawer = (width: number) => {
+  const { show, open, close } = useShowMenu();
+  useDisableBodyScroll(show);
+
   const drawer = useTransition(show, null, {
-    from: { transform: "translate3d(300px,0,0)" },
-    enter: { transform: "translate3d(0,0,0)" },
-    leave: { transform: "translate3d(300px,0,0)" },
+    from: { transform: `translate3d(${width}px,0,0)` },
+    enter: { transform: `translate3d(0,0,0)` },
+    leave: { transform: `translate3d(${width}px,0,0)` },
   });
 
   const overlay = useTransition(show, null, {
@@ -61,14 +82,12 @@ const DrawerMenu: React.SFC<DrawerMenuProps> = ({ logo, title, navItems }) => {
     leave: { opacity: 0 },
   });
 
-  const open = () => {
-    document.body.style.overflowY = "hidden";
-    set(true);
-  };
-  const close = () => {
-    document.body.style.overflowY = "scroll";
-    set(false);
-  };
+  return { show, open, close, drawer, overlay };
+};
+
+const DrawerMenu: React.SFC<DrawerMenuProps> = ({ logo, title, navItems }) => {
+  const { open, close, drawer, overlay } = useDrawer(300);
+
   return (
     <DrawerWrapper>
       <MenuButton onClick={open} />
