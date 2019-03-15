@@ -31,22 +31,29 @@ const useDisableBodyScroll = (show: boolean) => {
   }, [show]);
 };
 
-export const useDrawer = (width: string) => {
+export const useDrawer = () => {
   const { show, open, close } = useToggle();
   useDisableBodyScroll(show);
   useKeyDown(show, close);
+  return { show, open, close };
+};
 
+export const useSlide = (show, width: string) => {
   const drawer = useTransition(show, null, {
     from: { transform: `translate3d(${width},0,0)` },
     enter: { transform: `translate3d(0,0,0)` },
     leave: { transform: `translate3d(${width},0,0)` },
   });
 
+  return { drawer };
+};
+
+export const useOverlay = show => {
   const overlay = useTransition(show, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
 
-  return { show, open, close, drawer, overlay };
+  return { overlay };
 };

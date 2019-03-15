@@ -5,7 +5,7 @@ import { Container } from "src/components/Container";
 
 interface Props {
   height: number;
-  phone: string;
+  phone?: string;
 }
 
 const TopBar: React.SFC<Props> = ({ height, phone }) => {
@@ -18,12 +18,16 @@ const TopBar: React.SFC<Props> = ({ height, phone }) => {
           color="white.dark"
         >
           <Flex alignItems="center">
-            <Text ml={1} fontSize={0}>
-              Give us a call now:
-            </Text>
-            <Text ml={1} fontSize={0} fontWeight={5}>
-              {phone}
-            </Text>
+            {phone && (
+              <>
+                <Text ml={1} fontSize={0}>
+                  Give us a call now:
+                </Text>
+                <Text ml={1} fontSize={0} fontWeight={5}>
+                  {phone}
+                </Text>
+              </>
+            )}
           </Flex>
           <Text fontSize={0}>text</Text>
         </Flex>
